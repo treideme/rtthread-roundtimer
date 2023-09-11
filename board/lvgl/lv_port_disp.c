@@ -6,6 +6,7 @@
  * Change Logs:
  * Date           Author       Notes
  * 2021-11-24     Rbb666       The first version
+ * 2023-09-10     Thomas Reidemeister trim LVGL buffers to just 1
  */
 #include <lvgl.h>
 #include "hal_data.h"
@@ -32,7 +33,8 @@ static struct rt_device_graphic_info info;
 /*Static or global buffer(s). The second buffer is optional*/
 // 0x1FFE0000    0x20040000
 lv_color_t buf_1[COLOR_BUFFER];
-lv_color_t buf_2[COLOR_BUFFER];
+//lv_color_t buf_2[COLOR_BUFFER];
+lv_color_t *buf_2 = NULL;
 
 #if !LV_USE_GPU_RA6M3_G2D
 static void color_to16_maybe(lv_color16_t *dst, lv_color_t *src)

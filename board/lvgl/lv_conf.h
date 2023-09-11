@@ -6,6 +6,7 @@
  * Change Logs:
  * Date           Author        Notes
  * 2023-02-22     Rbb666        First version
+ * 2023-09-10     Thomas Reidemeister Reconfigure for GUI Entry
  */
 
 #ifndef LV_CONF_H
@@ -19,7 +20,7 @@
 #define LV_USE_GPU_RA6M3_G2D        1
 #define LV_GPU_RA6M3_G2D_INCLUDE    "hal_data.h"
 
-#define LV_USE_PERF_MONITOR         1
+#define LV_USE_PERF_MONITOR         0  // TR: Disabled to conserve flash
 #define LV_COLOR_DEPTH              16
 
 #ifdef PKG_USING_ILI9341

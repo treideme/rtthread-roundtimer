@@ -175,7 +175,6 @@
 #define PKG_LVGL_DISP_REFR_PERIOD 30
 #define PKG_LVGL_USING_LATEST_VERSION
 #define PKG_LVGL_VER_NUM 0x99999
-#define PKG_USING_LV_MUSIC_DEMO
 /* end of LVGL: powerful and easy-to-use embedded GUI library */
 
 /* u8g2: a monochrome graphic library */
@@ -304,8 +303,6 @@
 #define BSP_USING_LVGL
 #define BSP_USING_LCD_RGB
 #define BSP_USING_TOUCH
-#define BSP_USING_LVGL_DEMO
-#define BSP_USING_LVGL_MUSIC_DEMO
 /* end of On-chip Peripheral Drivers */
 
 /* Board extended module Drivers */

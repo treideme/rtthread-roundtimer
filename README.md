@@ -4,10 +4,18 @@
  * [RT-Thread Studio](https://www.rt-thread.io/studio.html)
    * Install HMI-Toolchain
    * Make sure that PyOCD DAP is the newest revision (otherwise the files won't flash)
+   * Make sure you install the latest GNU_Tools_for_ARM_Embedded (i.e. the 5.4.1 doesn't have proper LTO support)
 
 ![](docs/picture/required_items.jpg)
 
  * Commandline / SCONS build TBD
+
+## Entry Points
+```
+ +-+ src
+   +- gui_entry.c: Mostly LCD/Event handlers Main entry point for GUI handling, called out of LVGL RT-Thread port
+   +- hal_entry.c: Mostly I/O Main entry point for HAL, called out of RT-Thread
+```
 
 ----
 Original docs

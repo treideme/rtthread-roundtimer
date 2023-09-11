@@ -9,6 +9,7 @@
  * 2021-02-13     Meco Man     re-implement exit() and abort()
  * 2021-02-21     Meco Man     improve and beautify syscalls
  * 2021-02-24     Meco Man     fix bug of _isatty_r()
+ * 2023-09-10     Thomas Reidemeister Add used markers to allow for flto in GCC.
  */
 
 #include <reent.h>
@@ -32,7 +33,7 @@
 #include <rtdbg.h>
 
 #ifdef RT_USING_HEAP /* Memory routine */
-void *_malloc_r(struct _reent *ptr, size_t size)
+__attribute__((used)) void *_malloc_r(struct _reent *ptr, size_t size)
 {
     void* result;
 
@@ -45,7 +46,7 @@ void *_malloc_r(struct _reent *ptr, size_t size)
     return result;
 }
 
-void *_realloc_r(struct _reent *ptr, void *old, size_t newlen)
+__attribute__((used)) void *_realloc_r(struct _reent *ptr, void *old, size_t newlen)
 {
     void* result;
 
@@ -58,7 +59,7 @@ void *_realloc_r(struct _reent *ptr, void *old, size_t newlen)
     return result;
 }
 
-void *_calloc_r(struct _reent *ptr, size_t size, size_t len)
+__attribute__((used)) void *_calloc_r(struct _reent *ptr, size_t size, size_t len)
 {
     void* result;
 
@@ -71,7 +72,7 @@ void *_calloc_r(struct _reent *ptr, size_t size, size_t len)
     return result;
 }
 
-void _free_r(struct _reent *ptr, void *addr)
+__attribute__((used)) void _free_r(struct _reent *ptr, void *addr)
 {
     rt_free(addr);
 }
