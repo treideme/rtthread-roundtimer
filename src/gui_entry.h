@@ -12,6 +12,7 @@
 
 #include <lvgl.h>
 #include <rtthread.h>
+#include "ui.h"
 
 #define COLOR_RED lv_color_hex(0xFF0000)
 

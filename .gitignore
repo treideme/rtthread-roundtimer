@@ -4,3 +4,10 @@
 ra_cfg.txt
 
 /Debug/
+/squareline/CMakeLists.txt
+/squareline/filelist.txt
+/squareline/autosave
+/squareline/backup
+
+.idea
+.config.old
