@@ -50,17 +50,16 @@ if PLATFORM == 'gcc':
     OBJDUMP = PREFIX + 'objdump'
     OBJCPY = PREFIX + 'objcopy'
     NM = PREFIX + 'nm'
-
-    DEVICE = ' -mcpu=cortex-m4 -mthumb -mfpu=fpv5-sp-d16 -mfloat-abi=hard -ffunction-sections -fdata-sections'
+    DEVICE = ' -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16  -ffunction-sections -fdata-sections -flto'
     CFLAGS = DEVICE + ' -Dgcc -D_POSIX_SOURCE'
     AFLAGS = ' -c' + DEVICE + ' -x assembler-with-cpp -Wa,-mimplicit-it=thumb '
-    LFLAGS = DEVICE + ' -Wl,--gc-sections,-Map=rtthread.map,-cref,-u,Reset_Handler -T script/fsp.ld -L script/'
+    LFLAGS = DEVICE + ' -Wl,-Map=rtthread.map -T script/fsp.ld -L script/  -Xlinker --cref --specs=nano.specs'
 
     CPATH = ''
     LPATH = ''
 
     if BUILD == 'debug':
-        CFLAGS += ' -Os -gdwarf-2 -g -Wall'
+        CFLAGS += ' -Os -gdwarf-2 -g -Wall -Wextra'
         AFLAGS += ' -gdwarf-2'
     else:
         CFLAGS += ' -Os'
