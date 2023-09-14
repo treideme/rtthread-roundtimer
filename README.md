@@ -21,6 +21,15 @@ scons --verbose
 pyocd.exe flash --target=R7FA6M3AH --erase=auto --frequency=1000000 C:\RT-ThreadStudio\workspace\rtthread-roundtimer\Debug\rtthread.bin
 ```
 
+ * Debugger setup on Linux
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install -U pyocd
+# Flash scons-generated binary
+pyocd flash --target=R7FA6M3AH --erase=auto --frequency=1000000 rtthread.hex
+```
+
 ## Entry Points
 ```
  +-+ src
