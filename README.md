@@ -18,6 +18,7 @@
 ```bash
 source ./envsetup.sh
 scons --verbose
+pyocd.exe flash --target=R7FA6M3AH --erase=auto --frequency=1000000 C:\RT-ThreadStudio\workspace\rtthread-roundtimer\Debug\rtthread.bin
 ```
 
 ## Entry Points
