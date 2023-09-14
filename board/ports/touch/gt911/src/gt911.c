@@ -6,8 +6,10 @@
  * Change Logs:
  * Date           Author       Notes
  * 2021-01-13     RiceChen     the first version
+ * 2023-09-13     Thomas Reidemeister Added Stdint reference to enable scons build
  */
 
+#include <stdint.h>
 #include <rtthread.h>
 #include <rtdevice.h>
 

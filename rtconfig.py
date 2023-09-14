@@ -52,7 +52,7 @@ if PLATFORM == 'gcc':
     NM = PREFIX + 'nm'
 
     DEVICE = ' -mcpu=cortex-m4 -mthumb -mfpu=fpv5-sp-d16 -mfloat-abi=hard -ffunction-sections -fdata-sections'
-    CFLAGS = DEVICE + ' -Dgcc'
+    CFLAGS = DEVICE + ' -Dgcc -D_POSIX_SOURCE'
     AFLAGS = ' -c' + DEVICE + ' -x assembler-with-cpp -Wa,-mimplicit-it=thumb '
     LFLAGS = DEVICE + ' -Wl,--gc-sections,-Map=rtthread.map,-cref,-u,Reset_Handler -T script/fsp.ld -L script/'
 
@@ -60,7 +60,7 @@ if PLATFORM == 'gcc':
     LPATH = ''
 
     if BUILD == 'debug':
-        CFLAGS += ' -O0 -gdwarf-2 -g -Wall'
+        CFLAGS += ' -Os -gdwarf-2 -g -Wall'
         AFLAGS += ' -gdwarf-2'
     else:
         CFLAGS += ' -Os'

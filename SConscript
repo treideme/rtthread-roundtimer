@@ -16,6 +16,8 @@ elif rtconfig.PLATFORM in ['gcc', 'armclang']:
     if GetOption('target') != 'mdk5':
         CPPPATH = [cwd]
         src = Glob('./src/*.c')
+        src += Glob('./src/components/*.c')
+        src += Glob('./src/screens/*.c')
 
 group = DefineGroup('Applications', src, depend = [''], CPPPATH = CPPPATH)
 

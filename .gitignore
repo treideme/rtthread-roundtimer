@@ -11,3 +11,11 @@ ra_cfg.txt
 
 .idea
 .config.old
+
+__pycache__/
+*.o
+*.elf
+*.hex
+*.map
+.sconsign.dblite
+compile_commands.json
