@@ -39,6 +39,9 @@ BUILD = 'debug'
 
 if PLATFORM == 'gcc':
     # toolchains
+    import shutil
+    import os
+    EXEC_PATH=os.path.dirname(shutil.which('arm-none-eabi-gcc'))
     PREFIX = 'arm-none-eabi-'
     CC = PREFIX + 'gcc'
     AS = PREFIX + 'gcc'
@@ -50,16 +53,16 @@ if PLATFORM == 'gcc':
     OBJDUMP = PREFIX + 'objdump'
     OBJCPY = PREFIX + 'objcopy'
     NM = PREFIX + 'nm'
-    DEVICE = ' -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16  -ffunction-sections -fdata-sections -flto'
-    CFLAGS = DEVICE + ' -Dgcc -D_POSIX_SOURCE'
+    DEVICE = ' -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv5-sp-d16  -ffunction-sections -fdata-sections -flto'
+    CFLAGS = DEVICE + ' -std=gnu11'
     AFLAGS = ' -c' + DEVICE + ' -x assembler-with-cpp -Wa,-mimplicit-it=thumb '
-    LFLAGS = DEVICE + ' -T script/fsp.ld -Xlinker --gc-sections -L script/ -Wl,-Map=rtthread.map -Xlinker --cref --specs=nano.specs -lc -lm'
+    LFLAGS = DEVICE + ' -T script/fsp.ld -Xlinker --gc-sections -L script/ -Wl,-Map=rtthread.map -Xlinker --cref --specs=nano.specs'
 
     CPATH = ''
     LPATH = ''
 
     if BUILD == 'debug':
-        CFLAGS += ' -Os -gdwarf-2 -g -Wall -Wextra'
+        CFLAGS += ' -Os -gdwarf-2 -g'
         AFLAGS += ' -gdwarf-2'
     else:
         CFLAGS += ' -Os'
