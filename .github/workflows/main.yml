@@ -27,10 +27,17 @@ jobs:
   build_scons:
     runs-on: ubuntu-22.04
     steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+        with:
+          lfs: true
+          submodules: true
+          path: code
+
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y scons wget build-essential
+          sudo apt-get install -y scons wget build-essential git
           # Get GNU ARM Tools 10.3.x
           wget https://developer.arm.com/-/media/Files/downloads/gnu-rm/10.3-2021.10/gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2
           tar xvf gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2
@@ -38,14 +45,9 @@ jobs:
           # Sanity check
           arm-none-eabi-gcc --version
 
-      - name: Check out code
-        uses: actions/checkout@v3
-        with:
-          lfs: true
-          submodules: true
-
       - name: Build project using scons
         run: |
           export PATH=$PATH:$PWD/gcc-arm-none-eabi-10.3-2021.10/bin
+          cd code
           source ./envsetup.sh
           scons --verbose
