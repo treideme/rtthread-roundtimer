@@ -53,7 +53,7 @@ if PLATFORM == 'gcc':
     DEVICE = ' -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16  -ffunction-sections -fdata-sections -flto'
     CFLAGS = DEVICE + ' -Dgcc -D_POSIX_SOURCE'
     AFLAGS = ' -c' + DEVICE + ' -x assembler-with-cpp -Wa,-mimplicit-it=thumb '
-    LFLAGS = DEVICE + ' -Wl,-Map=rtthread.map -T script/fsp.ld -L script/  -Xlinker --cref --specs=nano.specs'
+    LFLAGS = DEVICE + ' -T script/fsp.ld -Xlinker --gc-sections -L script/ -Wl,-Map=rtthread.map -Xlinker --cref --specs=nano.specs -lc -lm'
 
     CPATH = ''
     LPATH = ''
