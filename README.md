@@ -1,5 +1,7 @@
 # LVGL Contest Demo
 
+![Continuous Integration](https://github.com/treideme/rtthread-roundtimer/actions/workflows/main.yml/badge.svg)
+
 ## Build and Deploy
  * [RT-Thread Studio](https://www.rt-thread.io/studio.html)
    * Install HMI-Toolchain
@@ -8,7 +10,15 @@
 
 ![](docs/picture/required_items.jpg)
 
- * Commandline / SCONS build TBD
+ * Scons build on Linux
+   * Install the [GNU ARM 10.3 toolchain](https://developer.arm.com/-/media/Files/downloads/gnu-rm/10.3-2021.10/gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2)
+     * Make sure it is in path 
+   * Make sure you have scons installed `sudo apt-get install scons`
+   * On the console 
+```bash
+source ./envsetup.sh
+scons --verbose
+```
 
 ## Entry Points
 ```
