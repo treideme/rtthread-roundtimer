@@ -8,13 +8,20 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 #include "gui_entry.h"
+#include "gui_color.h"
 
 //static void _btn_cb(lv_event_t * event) {
 //    rt_kprintf("Event Received 0x%03X\n", event->code);
 //}
 
 void lv_user_gui_init(void) {
-    ui_init();
+  ui_init();
+  // Configure look and feel and event-handlers of color chooser
+  lv_user_color_screen_init(ui_Color_Chooser);
+  lv_user_color_set(7);
+  // temporary load color chooser
+  lv_disp_load_scr( ui_Color_Chooser);
+
 //    /* Set background color red */
 //    lv_obj_set_style_bg_color(lv_scr_act(), COLOR_RED, 0);
 //    lv_obj_set_style_text_color(lv_scr_act(), lv_color_hex(0xffffff), LV_PART_MAIN);

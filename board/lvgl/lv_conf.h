@@ -22,6 +22,7 @@
 
 #define LV_USE_PERF_MONITOR         0  // TR: Disabled to conserve flash
 #define LV_COLOR_DEPTH              16
+#define LV_FONT_MONTSERRAT_20       1  // TR: Enable larger font
 
 #ifdef PKG_USING_ILI9341
     #define LV_HOR_RES_MAX          240

@@ -1,0 +1,2 @@
+pyocd==0.35.1
+elf-size-analyze==0.2.2
