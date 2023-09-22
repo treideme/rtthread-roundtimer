@@ -90,3 +90,12 @@ int lv_user_color_set(size_t num) {
     return -1;
   }
 }
+
+ssize_t lv_user_color_get() {
+  for(ssize_t i = 0; i < ARRAY_SIZE(text_colors); i++) {
+    if(lv_obj_get_state(_button_colors[i]) & LV_STATE_CHECKED) {
+      return i;
+    }
+  }
+  return -1;
+}
