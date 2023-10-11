@@ -17,6 +17,7 @@ elif rtconfig.PLATFORM in ['gcc', 'armclang']:
         CPPPATH = [cwd]
         src = Glob('./src/*.c')
         src += Glob('./src/components/*.c')
+        src += Glob('./src/mp3/*.c')
         src += Glob('./src/screens/*.c')
 
 group = DefineGroup('Applications', src, depend = [''], CPPPATH = CPPPATH)
