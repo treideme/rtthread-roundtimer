@@ -41,7 +41,10 @@
  * mp3dec.c - platform-independent top level MP3 decoder API
  **************************************************************************************/
 
-#include <string.h>		/* for memmove, memcpy (can replace with different implementations if desired) */
+//#include <string.h>		/* for memmove, memcpy (can replace with different implementations if desired) */
+#include <rtthread.h>
+#define memmove rt_memmove
+#define memcpy rt_memcpy
 #include "mp3common.h"	/* includes mp3dec.h (public API) and internal, platform-independent API */
 //#include "hxthreadyield.h"
 
@@ -287,12 +290,14 @@ int MP3Decode(HMP3Decoder hMP3Decoder, unsigned char **inbuf, int *bytesLeft, sh
 //	StartYield(&ulTime);
 	if (!mp3DecInfo)
 		return ERR_MP3_NULL_POINTER;
+  rt_kprintf("MP3Decode 1\n");
 
 	/* unpack frame header */
 	fhBytes = UnpackFrameHeader(mp3DecInfo, *inbuf);
 	if (fhBytes < 0)	
 		return ERR_MP3_INVALID_FRAMEHEADER;		/* don't clear outbuf since we don't know size (failed to parse header) */
 	*inbuf += fhBytes;
+  rt_kprintf("MP3Decode 2\n");
 	
 	/* unpack side info */
 	siBytes = UnpackSideInfo(mp3DecInfo, *inbuf);
@@ -302,6 +307,7 @@ int MP3Decode(HMP3Decoder hMP3Decoder, unsigned char **inbuf, int *bytesLeft, sh
 	}
 	*inbuf += siBytes;
 	*bytesLeft -= (fhBytes + siBytes);
+  rt_kprintf("MP3Decode 3\n");
 	
 	/* if free mode, need to calculate bitrate and nSlots manually, based on frame size */
 	if (mp3DecInfo->bitrate == 0 || mp3DecInfo->freeBitrateFlag) {
@@ -318,6 +324,7 @@ int MP3Decode(HMP3Decoder hMP3Decoder, unsigned char **inbuf, int *bytesLeft, sh
 		}
 		mp3DecInfo->nSlots = mp3DecInfo->freeBitrateSlots + CheckPadBit(mp3DecInfo);	/* add pad byte, if required */
 	}
+  rt_kprintf("MP3Decode 4\n");
 
 	/* useSize != 0 means we're getting reformatted (RTP) packets (see RFC 3119)
 	 *  - calling function assembles "self-contained" MP3 frames by shifting any main_data 
@@ -332,6 +339,7 @@ int MP3Decode(HMP3Decoder hMP3Decoder, unsigned char **inbuf, int *bytesLeft, sh
 			MP3ClearBadFrame(mp3DecInfo, outbuf);
 			return ERR_MP3_INVALID_FRAMEHEADER;
 		}
+    rt_kprintf("MP3Decode 5\n");
 
 		/* can operate in-place on reformatted frames */
 		mp3DecInfo->mainDataBytes = mp3DecInfo->nSlots;
@@ -347,8 +355,10 @@ int MP3Decode(HMP3Decoder hMP3Decoder, unsigned char **inbuf, int *bytesLeft, sh
 		/* fill main data buffer with enough new data for this frame */
 		if (mp3DecInfo->mainDataBytes >= mp3DecInfo->mainDataBegin) {
 			/* adequate "old" main data available (i.e. bit reservoir) */
+      rt_kprintf("MP3Decode 6\n");
 			memmove(mp3DecInfo->mainBuf, mp3DecInfo->mainBuf + mp3DecInfo->mainDataBytes - mp3DecInfo->mainDataBegin, mp3DecInfo->mainDataBegin);
 			memcpy(mp3DecInfo->mainBuf + mp3DecInfo->mainDataBegin, *inbuf, mp3DecInfo->nSlots);
+      rt_kprintf("MP3Decode 7\n");
 
 			mp3DecInfo->mainDataBytes = mp3DecInfo->mainDataBegin + mp3DecInfo->nSlots;
 			*inbuf += mp3DecInfo->nSlots;
@@ -373,7 +383,7 @@ int MP3Decode(HMP3Decoder hMP3Decoder, unsigned char **inbuf, int *bytesLeft, sh
 			/* unpack scale factors and compute size of scale factor block */
 			prevBitOffset = bitOffset;
 			offset = UnpackScaleFactors(mp3DecInfo, mainPtr, &bitOffset, mainBits, gr, ch);
-
+      rt_kprintf("MP3Decode 8\n");
 			sfBlockBits = 8*offset - prevBitOffset + bitOffset;
 			huffBlockBits = mp3DecInfo->part23Length[gr][ch] - sfBlockBits;
 			mainPtr += offset;
@@ -386,7 +396,9 @@ int MP3Decode(HMP3Decoder hMP3Decoder, unsigned char **inbuf, int *bytesLeft, sh
 
 			/* decode Huffman code words */
 			prevBitOffset = bitOffset;
+      // FIXME: Unaligned access here
 			offset = DecodeHuffman(mp3DecInfo, mainPtr, &bitOffset, huffBlockBits, gr, ch);
+      rt_kprintf("MP3Decode 9\n");
 			if (offset < 0) {
 				MP3ClearBadFrame(mp3DecInfo, outbuf);
 				return ERR_MP3_INVALID_HUFFCODES;
@@ -395,12 +407,14 @@ int MP3Decode(HMP3Decoder hMP3Decoder, unsigned char **inbuf, int *bytesLeft, sh
 			mainPtr += offset;
 			mainBits -= (8*offset - prevBitOffset + bitOffset);
 		}
+    rt_kprintf("MP3Decode 10\n");
 //		YieldIfRequired(&ulTime);
 		/* dequantize coefficients, decode stereo, reorder short blocks */
 		if (Dequantize(mp3DecInfo, gr) < 0) {
 			MP3ClearBadFrame(mp3DecInfo, outbuf);
 			return ERR_MP3_INVALID_DEQUANTIZE;			
 		}
+    rt_kprintf("MP3Decode 11\n");
 
 		/* alias reduction, inverse MDCT, overlap-add, frequency inversion */
 		for (ch = 0; ch < mp3DecInfo->nChans; ch++)
@@ -408,12 +422,14 @@ int MP3Decode(HMP3Decoder hMP3Decoder, unsigned char **inbuf, int *bytesLeft, sh
 				MP3ClearBadFrame(mp3DecInfo, outbuf);
 				return ERR_MP3_INVALID_IMDCT;			
 			}
+    rt_kprintf("MP3Decode 12\n");
 
 		/* subband transform - if stereo, interleaves pcm LRLRLR */
 		if (Subband(mp3DecInfo, outbuf + gr*mp3DecInfo->nGranSamps*mp3DecInfo->nChans) < 0) {
 			MP3ClearBadFrame(mp3DecInfo, outbuf);
 			return ERR_MP3_INVALID_SUBBAND;			
 		}
+    rt_kprintf("MP3Decode 13\n");
 	}
 	return ERR_MP3_NONE;
 }
